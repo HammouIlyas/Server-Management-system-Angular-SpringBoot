@@ -9,11 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Collection;
+import java.util.Random;
 
 import static java.lang.Boolean.TRUE;
 
@@ -72,7 +74,10 @@ public class ServerServicesIplementation implements ServerServices {
     }
 
     private String setServerImageUrl() {
-        return null;
+        String [] imageServersNames = {"server1.png","server2.png","server3.png","server4.png"};
+        System.out.println();
+        return ServletUriComponentsBuilder.fromCurrentContextPath().path("/server/image" +imageServersNames[new Random().nextInt(4)]).toUriString();
+
     }
 
 }
