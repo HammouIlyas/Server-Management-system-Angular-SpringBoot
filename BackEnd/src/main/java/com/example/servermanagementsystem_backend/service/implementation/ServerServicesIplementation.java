@@ -2,13 +2,20 @@ package com.example.servermanagementsystem_backend.service.implementation;
 
 import com.example.servermanagementsystem_backend.Repositories.ServerRepo;
 import com.example.servermanagementsystem_backend.model.Server;
+import com.example.servermanagementsystem_backend.model.ServerStatus;
 import com.example.servermanagementsystem_backend.service.abstraction.ServerServices;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Collection;
+
+import static java.lang.Boolean.TRUE;
 
 @Service
 @Transactional
@@ -23,31 +30,49 @@ public class ServerServicesIplementation implements ServerServices {
 
     @Override
     public Server createServer(Server server) {
-        return null;
+        log.info("creating and saving a new server" + server.getName());
+        server.setImageUrl(setServerImageUrl());
+        return serverRepo.save(server);
     }
 
     @Override
     public Server getServer(Long id) {
-        return null;
+        log.info("getting server with id : "+ id );
+        return serverRepo.findById(id).get();
     }
 
     @Override
     public Server UpdateServer(Server server) {
-        return null;
+        log.info("updating server : " +server.getName());
+        return serverRepo.save(server);
     }
 
     @Override
     public Boolean deleteServer(Long id) {
-        return null;
+        log.info("deleting server with id : " + id);
+        serverRepo.deleteById(id);
+        return TRUE;
+
     }
 
     @Override
-    public Server pingServer(Server server) {
-        return null;
+    public Server pingServer(String ipAdress) throws IOException {
+        log.info("pinging server with IP : " + ipAdress );
+        Server server = serverRepo.findServerByIpAdresse(ipAdress);
+        InetAddress inetAddress = InetAddress.getByName(ipAdress);
+        server.setStatus(inetAddress.isReachable(10000)? ServerStatus.SERVER_UP : ServerStatus.SERVER_DOWN);
+        serverRepo.save(server);
+        return server;
     }
 
     @Override
-    public Collection<Server> listServers(int number) {
+    public Collection<Server> listServers(int size) {
+        log.info("fetching all servers");
+        return serverRepo.findAll(PageRequest.of(0,size)).toList();
+    }
+
+    private String setServerImageUrl() {
         return null;
     }
+
 }
