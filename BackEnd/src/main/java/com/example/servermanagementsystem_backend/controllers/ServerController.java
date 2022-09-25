@@ -32,7 +32,7 @@ public class ServerController {
         return ResponseEntity.ok(
                 HttpResponse.builder()
                         .timeStamp(LocalDate.now())
-                        .data(Map.of("servers",servicesIplementation.listServers(30)))
+                        .data(Map.of("servers",servicesIplementation.listServers(2)))
                         .message("severs found")
                         .status(HttpStatus.OK)
                         .statusCode(HttpStatus.OK.value())
@@ -99,6 +99,6 @@ public class ServerController {
 
     @GetMapping(path="/image/{fileName}", produces = IMAGE_PNG_VALUE)
     public byte[] getServerImage(@PathVariable String fileName) throws IOException {
-        return Files.readAllBytes(Paths.get(System.getProperty("user.home") + "Downloads/image/" + fileName));
+        return Files.readAllBytes(Paths.get(System.getProperty("user.home") + "/Desktop/images/" + fileName));
     }
 }

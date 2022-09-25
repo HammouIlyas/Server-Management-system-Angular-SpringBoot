@@ -24,13 +24,13 @@ public class ServerManagementSystemBackendApplication {
     @Bean
     CommandLineRunner run(){
         return args -> {
-            serverRepo.save(new Server(null,"192.168.1.156","Fedora Linux","16GB",
+            serverRepo.save(new Server(null,"196.75.203.63","Fedora Linux","16GB",
                     "personnal laptop","http://....", SERVER_UP));
             serverRepo.save(new Server(null,"192.168.1.146","Ubuntu Linux","32GB",
                     "Orange server","http://....", SERVER_UP));
-            serverRepo.save(new Server(null,"192.168.1.136","Fedora Linux","64GB",
+            serverRepo.save(new Server(null,"196.75.203.61","Fedora Linux","64GB",
                     "Mail server","http://....", SERVER_DOWN));
-            serverRepo.save(new Server(null,"192.168.1.126","Debian Linux","128GB",
+            serverRepo.save(new Server(null,"196.75.203.62","Debian Linux","128GB",
                     "Web server","http://....", SERVER_UP));
         };
     }
