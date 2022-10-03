@@ -13,6 +13,6 @@ import java.util.Collection;
  */
 @Repository
 public interface ServerRepo extends JpaRepository<Server,Long> {
-    Server findServerByIpAdresse(String ipAdress);
+    Server findServerByIpAddress(String ipAdress);
     Collection<Server> findServersByName(String name);
 }

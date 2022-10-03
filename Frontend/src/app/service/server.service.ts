@@ -19,9 +19,18 @@ export class ServerService {
   //seconde implementation of getServers()
   servers$ = <Observable<CustomResponse>>(
     this.http
-      .get<CustomResponse>(this.apiUrl + '/server/list')
+      .get<CustomResponse>(`${this.apiUrl}/server/list`)
       .pipe(tap(console.log), catchError(this.handleError))
   );
+  getAllServers() {
+    console.log('getting data');
+    return this.http
+      .get<CustomResponse>(`${this.apiUrl}/server/list`)
+      .subscribe((data) => {
+        console.log('hahaha');
+        console.log(data);
+      });
+  }
 
   save$ = (server: Server) =>
     <Observable<CustomResponse>>(

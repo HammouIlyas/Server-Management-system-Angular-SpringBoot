@@ -60,7 +60,7 @@ public class ServerServicesIplementation implements ServerServices {
     @Override
     public Server pingServer(String ipAdress) throws IOException {
         log.info("pinging server with IP : " + ipAdress );
-        Server server = serverRepo.findServerByIpAdresse(ipAdress);
+        Server server = serverRepo.findServerByIpAddress(ipAdress);
         InetAddress inetAddress = InetAddress.getByName(ipAdress);
         server.setStatus(inetAddress.isReachable(10000)? ServerStatus.SERVER_UP : ServerStatus.SERVER_DOWN);
         serverRepo.save(server);
