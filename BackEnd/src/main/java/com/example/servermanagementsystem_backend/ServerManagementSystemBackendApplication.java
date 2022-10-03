@@ -21,16 +21,18 @@ public class ServerManagementSystemBackendApplication {
     }
     @Autowired
     private ServerRepo serverRepo;
+    @Autowired
+    private ServerServicesIplementation servicesIplementation;
     @Bean
     CommandLineRunner run(){
         return args -> {
-            serverRepo.save(new Server(null,"196.75.203.63","Fedora Linux","16GB",
+            servicesIplementation.createServer(new Server(null,"196.75.203.63","Fedora Linux","16GB",
                     "personnal laptop","http://....", SERVER_UP));
-            serverRepo.save(new Server(null,"192.168.1.146","Ubuntu Linux","32GB",
+            servicesIplementation.createServer(new Server(null,"192.168.1.146","Ubuntu Linux","32GB",
                     "Orange server","http://....", SERVER_UP));
-            serverRepo.save(new Server(null,"196.75.203.61","Fedora Linux","64GB",
+            servicesIplementation.createServer(new Server(null,"196.75.203.61","Fedora Linux","64GB",
                     "Mail server","http://....", SERVER_DOWN));
-            serverRepo.save(new Server(null,"196.75.203.62","Debian Linux","128GB",
+            servicesIplementation.createServer(new Server(null,"196.75.203.62","Debian Linux","128GB",
                     "Web server","http://....", SERVER_UP));
         };
     }

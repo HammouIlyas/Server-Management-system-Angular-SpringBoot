@@ -34,6 +34,7 @@ public class ServerServicesIplementation implements ServerServices {
     public Server createServer(Server server) {
         log.info("creating and saving a new server" + server.getName());
         server.setImageUrl(setServerImageUrl());
+        System.out.println("server = " + server);
         return serverRepo.save(server);
     }
 
@@ -76,7 +77,7 @@ public class ServerServicesIplementation implements ServerServices {
     private String setServerImageUrl() {
         String [] imageServersNames = {"server1.png","server2.png","server3.png","server4.png"};
         System.out.println();
-        return ServletUriComponentsBuilder.fromCurrentContextPath().path("/server/image" +imageServersNames[new Random().nextInt(4)]).toUriString();
+        return ("http://localhost:8081/server/image/" +imageServersNames[new Random().nextInt(4)]);
 
     }
 

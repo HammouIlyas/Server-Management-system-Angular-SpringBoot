@@ -24,8 +24,9 @@ public class Server {
     @NotBlank(message = "ip adreess must not be empty")
     private String ipAddress;
     private String name;
-    private String type;
     private String memory;
+    private String type;
+
     private String imageUrl;
     private ServerStatus status;
 

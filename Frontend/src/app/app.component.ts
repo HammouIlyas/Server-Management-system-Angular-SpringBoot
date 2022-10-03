@@ -6,6 +6,7 @@ import { CustomResponse } from './interface/custom-response';
 import { ServerService } from './service/server.service';
 import { HttpClient } from '@angular/common/http';
 import { Server } from './interface/server';
+import { Status } from './enum/status.enum';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,7 @@ import { Server } from './interface/server';
 export class AppComponent implements OnInit {
   appState$: Observable<AppState<CustomResponse>>;
   readonly DataState = dataState;
+  readonly ServerStatus = Status;
   constructor(private serverService: ServerService, private http: HttpClient) {}
 
   ngOnInit(): void {

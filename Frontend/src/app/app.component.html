@@ -27,7 +27,7 @@
             <ng-container *ngIf="(appState$ | async) as appState" [ngSwitch]="appState.dataState">
                 <ng-container *ngSwitchCase="DataState.LOADING">
                     <div class="col-md-12 single-note-item text-center">
-                        <div class="spinner-border text-info" role="status"></div>
+                        <div class="spinner-border text-info" role="status">LOADING ...</div>
                     </div>
                 </ng-container>
                 <ng-container *ngSwitchCase="DataState.LOADED">
@@ -44,16 +44,17 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody *ngFor="let server of appState.appData.data.servers">
                             <tr>
-                                <td><img src="" width="40" height="40" alt="" /></td>
-                                <td>ipAdress</td>
-                                <td>name</td>
-                                <td>memory</td>
-                                <td>type</td>
+                                <td><img [src]="server.imageUrl" width="40" height="40" alt="" /></td>
+                                <td>{{ server.ipAddress}}</td>
+                                <td>{{ server.name}}</td>
+                                <td>{{ server.memory}}</td>
+                                <td>{{ server.type}}</td>
                                 <td>
-                                    <span class="badge">
-
+                                    <span class="badge"
+                                        [ngClass]="server.status === ServerStatus.SERVER_UP ? 'badge-success':'badge-danger'">
+                                        {{ server.status}}
                                     </span>
                                 </td>
                                 <td>
