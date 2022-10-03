@@ -63,7 +63,7 @@ public class ServerServicesIplementation implements ServerServices {
         log.info("pinging server with IP : " + ipAdress );
         Server server = serverRepo.findServerByIpAddress(ipAdress);
         InetAddress inetAddress = InetAddress.getByName(ipAdress);
-        server.setStatus(inetAddress.isReachable(10000)? ServerStatus.SERVER_UP : ServerStatus.SERVER_DOWN);
+        server.setStatus(inetAddress.isReachable(3000)? ServerStatus.SERVER_UP : ServerStatus.SERVER_DOWN);
         serverRepo.save(server);
         return server;
     }

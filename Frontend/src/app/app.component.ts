@@ -1,5 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { catchError, map, Observable, of, startWith } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  map,
+  Observable,
+  of,
+  pipe,
+  startWith,
+} from 'rxjs';
 import { dataState } from './enum/data-state.enum';
 import { AppState } from './interface/app-state';
 import { CustomResponse } from './interface/custom-response';
@@ -17,12 +25,16 @@ export class AppComponent implements OnInit {
   appState$: Observable<AppState<CustomResponse>>;
   readonly DataState = dataState;
   readonly ServerStatus = Status;
+  private filterSubject = new BehaviorSubject<string>('');
+  private dataSubject = new BehaviorSubject<CustomResponse>(null);
+  filterStatus$ = this.filterSubject.asObservable();
+
   constructor(private serverService: ServerService, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.appState$ = this.serverService.servers$.pipe(
       map((response) => {
-        console.log('tiiiiiit tiiiiiiiiit');
+        this.dataSubject.next(response);
         return { dataState: dataState.LOADED, appData: response };
       }),
       startWith({ dataState: dataState.LOADING, appData: null }),
@@ -39,5 +51,55 @@ export class AppComponent implements OnInit {
       .subscribe((data) => {
         console.log(data);
       });
+  }
+
+  pingServer(ipAddress: string): void {
+    this.filterSubject.next(ipAddress);
+    this.appState$ = this.serverService.ping$(ipAddress).pipe(
+      map((response) => {
+        let index = 1;
+        index = this.dataSubject.value.data.servers.findIndex(
+          (server) => server.id === response.data.server.id
+        );
+        console.log(index);
+        this.dataSubject.value.data.servers[index] = response.data.server;
+        console.log(this.dataSubject.value.data.servers);
+
+        this.filterSubject.next('');
+        return { dataState: dataState.LOADED, appData: this.dataSubject.value };
+      }),
+      startWith({
+        dataState: dataState.LOADED,
+        appData: this.dataSubject.value,
+      }),
+      catchError((error) => {
+        this.filterSubject.next('');
+        console.log(error);
+        return of({ dataState: dataState.ERROR, appData: null, error: error });
+      })
+    );
+  }
+
+  filtringServers(status: Status): void {
+    console.log('teeeeeeeeeeeeet');
+    this.appState$ = this.serverService
+      .filter$(status, this.dataSubject.value)
+      .pipe(
+        map((response) => {
+          return { dataState: dataState.LOADED, appData: response };
+        }),
+        startWith({
+          dataState: dataState.LOADED,
+          appData: this.dataSubject.value,
+        }),
+        catchError((error) => {
+          console.log(error);
+          return of({
+            dataState: dataState.ERROR,
+            appData: null,
+            error: error,
+          });
+        })
+      );
   }
 }

@@ -13,10 +13,12 @@
                             <span>New Server</span>
                         </a>
                         <span>
-                            <select class="status" class="btn btn-info" style="height:33px;">
-                                <option value="ALL">ALL</option>
-                                <option value="SERVER_UP">SERVER UP</option>
-                                <option value="SERVER_DOWN">SERVER DOWN</option>
+                            <select class="status" class="btn btn-info" style="height:33px;" ngModel="ALL">
+                                <option value="ALL" (select)="filtringServers(ServerStatus.ALL)">ALL</option>
+                                <option value="SERVER_UP" (select)="filtringServers(ServerStatus.SERVER_UP)">SERVER UP
+                                </option>
+                                <option value="SERVER_DOWN" (click)="filtringServers(ServerStatus.SERVER_DOWN)">SERVER
+                                    DOWN</option>
                             </select>
                         </span>
                     </div>
@@ -54,13 +56,15 @@
                                 <td>
                                     <span class="badge"
                                         [ngClass]="server.status === ServerStatus.SERVER_UP ? 'badge-success':'badge-danger'">
-                                        {{ server.status}}
+                                        {{ server.status === ServerStatus.SERVER_UP ? 'SERVER UP':'SERVER DOWN'}}
                                     </span>
                                 </td>
                                 <td>
-                                    <a style="cursor:pointer">
-                                        <i class="material-icons" title="ping Server">&#xe328;</i>
-                                        <i class="fa fa-spinner fa-spin" style="font-size:24px;"></i>
+                                    <a style="cursor:pointer" (click)="pingServer(server.ipAddress)">
+                                        <i *ngIf="(filterStatus$ | async) === '' || (filterStatus$ | async)!== server.ipAddress"
+                                            class="material-icons" title="ping Server">&#xe328;</i>
+                                        <i *ngIf=" (filterStatus$ | async)=== server.ipAddress"
+                                            class="fa fa-spinner fa-spin" style="font-size:24px;"></i>
                                     </a>
                                 </td>
                                 <td>
@@ -73,7 +77,9 @@
                     </table>
                 </ng-container>
                 <ng-container *ngSwitchCase="DataState.ERROR">
-                    <div class="alert-danger">error</div>
+                    <div class="alert-danger">
+                        {{appState.error}}
+                    </div>
                 </ng-container>
             </ng-container>
         </div>
