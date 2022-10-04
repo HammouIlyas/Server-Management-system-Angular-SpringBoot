@@ -1,4 +1,4 @@
-@import url("https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css");
+@import url("http://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css");
 
 * {
@@ -39,4 +39,12 @@
   position: relative;
   float: right;
   right: 20px;
+}
+#addingserverForm {
+  margin-left: 10%;
+  margin-right: 10%;
+}
+#addEmployeeModal {
+  margin-left: 25%;
+  width: 100%;
 }
