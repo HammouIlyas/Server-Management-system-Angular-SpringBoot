@@ -15,6 +15,8 @@ import { ServerService } from './service/server.service';
 import { HttpClient } from '@angular/common/http';
 import { Server } from './interface/server';
 import { Status } from './enum/status.enum';
+import { NgForOf } from '@angular/common';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -101,5 +103,40 @@ export class AppComponent implements OnInit {
           });
         })
       );
+  }
+
+  onSelected(param: string): void {
+    switch (param) {
+      case 'SERVER_UP': {
+        this.filtringServers(this.ServerStatus.SERVER_UP);
+        break;
+      }
+      case 'SERVER_DOWN': {
+        this.filtringServers(this.ServerStatus.SERVER_DOWN);
+        break;
+      }
+      default: {
+        this.filtringServers(this.ServerStatus.ALL);
+        break;
+      }
+    }
+    console.log(param);
+  }
+  saveServer(serverForm: NgForm): void {
+    this.appState$ = this.serverService.save$(<Server>serverForm.value).pipe(
+      map((response) => {
+        this.dataSubject.value.data.servers.push(response.data.server);
+        console.log(response.data.server);
+        return { dataState: dataState.LOADED, appData: this.dataSubject.value };
+      }),
+      startWith({
+        dataState: dataState.LOADED,
+        appData: this.dataSubject.value,
+      }),
+      catchError((error) => {
+        console.log(error);
+        return of({ dataState: dataState.ERROR, appData: null, error: error });
+      })
+    );
   }
 }
