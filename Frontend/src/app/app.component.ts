@@ -29,7 +29,10 @@ export class AppComponent implements OnInit {
   readonly ServerStatus = Status;
   private filterSubject = new BehaviorSubject<string>('');
   private dataSubject = new BehaviorSubject<CustomResponse>(null);
+
   filterStatus$ = this.filterSubject.asObservable();
+  private addSubject = new BehaviorSubject<boolean>(false);
+  addSubject$ = this.addSubject.asObservable();
 
   constructor(private serverService: ServerService, private http: HttpClient) {}
 
@@ -123,10 +126,36 @@ export class AppComponent implements OnInit {
     console.log(param);
   }
   saveServer(serverForm: NgForm): void {
+    this.addSubject.next(true);
     this.appState$ = this.serverService.save$(<Server>serverForm.value).pipe(
       map((response) => {
         this.dataSubject.value.data.servers.push(response.data.server);
-        console.log(response.data.server);
+        document.getElementById('closeModal').click();
+        serverForm.resetForm({ status: this.ServerStatus.SERVER_DOWN });
+        this.addSubject.next(false);
+        return { dataState: dataState.LOADED, appData: this.dataSubject.value };
+      }),
+      startWith({
+        dataState: dataState.LOADED,
+        appData: this.dataSubject.value,
+      }),
+      catchError((error) => {
+        this.addSubject.next(false);
+        console.log(error);
+        return of({ dataState: dataState.ERROR, appData: null, error: error });
+      })
+    );
+  }
+
+  deleteServer(id: number): void {
+    this.appState$ = this.serverService.delete$(id).pipe(
+      map((response) => {
+        if (response.data.server) {
+          this.dataSubject.value.data.servers =
+            this.dataSubject.value.data.servers.filter(
+              (server) => server.id != id
+            );
+        }
         return { dataState: dataState.LOADED, appData: this.dataSubject.value };
       }),
       startWith({

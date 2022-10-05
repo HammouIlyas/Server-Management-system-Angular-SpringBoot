@@ -69,7 +69,8 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <a class="delete" data-toggle="modal" style="cursor:pointer">
+                                    <a class="delete" data-toggle="modal" style="cursor:pointer"
+                                        (click)="deleteServer(server.id)">
                                         <i class="material-icons" title="Delete" data-toggle="modal">&#xE872;</i>
                                     </a>
                                 </td>
@@ -131,10 +132,11 @@
                     <button type="button" class="btn btn-warning" id="closeModal" data-dismiss="modal">
                         cancel
                     </button>
-                    <button type="submit" [disabled]="serverForm.invalid" class="btn btn-success">
-                        <i class="fa fa-spinner fa-spin"></i>
-                        <span>Saving ..</span>
-                        <span>Add</span>
+                    <button type="submit" [disabled]="serverForm.invalid || (addSubject$ |async)"
+                        class="btn btn-success">
+                        <i *ngIf="(addSubject$ |async)" class="fa fa-spinner fa-spin"></i>
+                        <span *ngIf="(addSubject$ |async)">Saving ..</span>
+                        <span *ngIf="!(addSubject$ |async)">Add</span>
                     </button>
                 </div>
             </form>
