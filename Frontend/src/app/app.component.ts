@@ -34,7 +34,9 @@ export class AppComponent implements OnInit {
   private addSubject = new BehaviorSubject<boolean>(false);
   addSubject$ = this.addSubject.asObservable();
 
-  constructor(private serverService: ServerService, private http: HttpClient) {}
+  constructor(private serverService: ServerService, private http: HttpClient) {
+    //this.NotifierModule = this.NotifierModule;
+  }
 
   ngOnInit(): void {
     this.appState$ = this.serverService.servers$.pipe(
@@ -167,5 +169,8 @@ export class AppComponent implements OnInit {
         return of({ dataState: dataState.ERROR, appData: null, error: error });
       })
     );
+  }
+  printReport(): void {
+    this.serverService.printReport();
   }
 }

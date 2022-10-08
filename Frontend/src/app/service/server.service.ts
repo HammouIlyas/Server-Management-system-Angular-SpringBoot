@@ -87,4 +87,16 @@ export class ServerService {
     console.log(error);
     return throwError('there is an error , error-code : }' + error.status);
   }
+
+  printReport(): void {
+    let dataType = 'application/vnd.ms-excel.sheet.macroEnabled.12';
+    let tableData = document.getElementById('servers');
+    let htmlTable = tableData.outerHTML.replace(/ /g, '%20');
+    let linkDownload = document.createElement('a');
+    document.body.appendChild(linkDownload);
+    linkDownload.href = 'data:' + dataType + ', ' + htmlTable;
+    linkDownload.download = 'servers-full-report.xls';
+    linkDownload.click();
+    document.body.removeChild(linkDownload);
+  }
 }
