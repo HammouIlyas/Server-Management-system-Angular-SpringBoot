@@ -25,7 +25,7 @@ import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RequestMapping("/server")
 @RequiredArgsConstructor
 public class ServerController {
