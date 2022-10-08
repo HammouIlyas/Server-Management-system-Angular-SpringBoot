@@ -28,23 +28,51 @@
   padding: 6px;
   position: relative;
   color: #ffff;
-  position: relative;
+  justify-content: space-between;
+  display: flex;
 }
 
 #control-buttons {
   width: 350px;
   display: flex;
   justify-content: space-between;
-  margin-left: 510px;
+  margin-left: 30px;
   position: relative;
   float: right;
   right: 20px;
+}
+
+#control-buttons button,
+a {
+  width: 120px;
+  height: 35px;
+  margin-right: 10px;
 }
 #addingserverForm {
   margin-left: 10%;
   margin-right: 10%;
 }
 #addEmployeeModal {
-  margin-left: 25%;
   width: 100%;
+}
+.modal-dialog {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.modal-content {
+  height: 403px;
+}
+
+.modal-body div {
+  margin-top: 10px;
+}
+form {
+  height: 403px;
+  justify-items: space-between;
+}
+
+.modal-dialog button {
+  width: 50px;
+  margin-top: 20px;
 }
