@@ -1,146 +1,150 @@
-<div class="container-xl">
-    <div class="table-responsive">
-        <div class="table-wrapper">
-            <div ckass="table-title">
-                <div class="row" id="row-header">
-                    <div class="col-sm6">
-                        <h2>Manage Servers</h2>
-                    </div>
-                    <div class="col-sm6" id="control-buttons">
-                        <button type="button" class="btn btn-primary" (click)="printReport()">Print report</button>
-                        <a href="#addEmployeeModal" data-toggle="modal">
+<div class="wrapper">
+    <h2 class="page-title">Server Management System</h2>
+    <div class="container-xl">
+        <div class="table-responsive">
+            <div class="table-wrapper">
+                <div ckass="table-title">
+                    <div class="row" id="row-header">
+                        <div class="col-sm6">
+                            <h2>Manage Servers</h2>
+                        </div>
+                        <div class="col-sm6" id="control-buttons">
+                            <button type="button" class="btn btn-primary" (click)="printReport()">Print report</button>
+                            <a href="#addEmployeeModal" data-toggle="modal">
 
-                            <button type="button" class="btn btn-success">New Server</button>
-                        </a>
-                        <span>
-                            <select class="status" class="btn btn-info" style="height:35px;" #teams
-                                (change)="onSelected(teams.value)">
-                                <option value="ALL">ALL</option>
-                                <option value="SERVER_UP">SERVER UP
-                                </option>
-                                <option value="SERVER_DOWN">SERVER
-                                    DOWN</option>
-                            </select>
-                        </span>
-                    </div>
+                                <button type="button" class="btn btn-success">New Server</button>
+                            </a>
+                            <span>
+                                <select class="status" class="btn btn-info" style="height:35px;" #teams
+                                    (change)="onSelected(teams.value)">
+                                    <option value="ALL">ALL</option>
+                                    <option value="SERVER_UP">SERVER UP
+                                    </option>
+                                    <option value="SERVER_DOWN">SERVER
+                                        DOWN</option>
+                                </select>
+                            </span>
+                        </div>
 
+                    </div>
                 </div>
+                <br>
+                <ng-container *ngIf="(appState$ | async) as appState" [ngSwitch]="appState.dataState">
+                    <ng-container *ngSwitchCase="DataState.LOADING">
+                        <div class="col-md-12 single-note-item text-center">
+                            <div class="spinner-border text-info" role="status">LOADING ...</div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="DataState.LOADED">
+                        <table class="table table-striped table-hover" id="servers">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>IP Adress</th>
+                                    <th>Name</th>
+                                    <th>Memory</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Ping</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngFor="let server of appState.appData.data.servers">
+                                <tr>
+                                    <td><img [src]="server.imageUrl" width="40" height="40" alt="" /></td>
+                                    <td>{{ server.ipAddress}}</td>
+                                    <td>{{ server.name}}</td>
+                                    <td>{{ server.memory}}</td>
+                                    <td>{{ server.type}}</td>
+                                    <td>
+                                        <span class="badge"
+                                            [ngClass]="server.status === ServerStatus.SERVER_UP ? 'badge-success':'badge-danger'">
+                                            {{ server.status === ServerStatus.SERVER_UP ? 'SERVER UP':'SERVER DOWN'}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a style="cursor:pointer" (click)="pingServer(server.ipAddress)">
+                                            <i *ngIf="(filterStatus$ | async) === '' || (filterStatus$ | async)!== server.ipAddress"
+                                                class="material-icons" title="ping Server">&#xe328;</i>
+                                            <i *ngIf=" (filterStatus$ | async)=== server.ipAddress"
+                                                class="fa fa-spinner fa-spin" style="font-size:24px;"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a class="delete" data-toggle="modal" style="cursor:pointer"
+                                            (click)="deleteServer(server.id)">
+                                            <i class="material-icons" title="Delete" data-toggle="modal">&#xE872;</i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="DataState.ERROR">
+                        <div class="alert-danger">
+                            {{appState.error}}
+                        </div>
+                    </ng-container>
+                </ng-container>
             </div>
-            <br>
-            <ng-container *ngIf="(appState$ | async) as appState" [ngSwitch]="appState.dataState">
-                <ng-container *ngSwitchCase="DataState.LOADING">
-                    <div class="col-md-12 single-note-item text-center">
-                        <div class="spinner-border text-info" role="status">LOADING ...</div>
-                    </div>
-                </ng-container>
-                <ng-container *ngSwitchCase="DataState.LOADED">
-                    <table class="table table-striped table-hover" id="servers">
-                        <thead>
-                            <tr>
-                                <th>Image</th>
-                                <th>IP Adress</th>
-                                <th>Name</th>
-                                <th>Memory</th>
-                                <th>Type</th>
-                                <th>Status</th>
-                                <th>Ping</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody *ngFor="let server of appState.appData.data.servers">
-                            <tr>
-                                <td><img [src]="server.imageUrl" width="40" height="40" alt="" /></td>
-                                <td>{{ server.ipAddress}}</td>
-                                <td>{{ server.name}}</td>
-                                <td>{{ server.memory}}</td>
-                                <td>{{ server.type}}</td>
-                                <td>
-                                    <span class="badge"
-                                        [ngClass]="server.status === ServerStatus.SERVER_UP ? 'badge-success':'badge-danger'">
-                                        {{ server.status === ServerStatus.SERVER_UP ? 'SERVER UP':'SERVER DOWN'}}
-                                    </span>
-                                </td>
-                                <td>
-                                    <a style="cursor:pointer" (click)="pingServer(server.ipAddress)">
-                                        <i *ngIf="(filterStatus$ | async) === '' || (filterStatus$ | async)!== server.ipAddress"
-                                            class="material-icons" title="ping Server">&#xe328;</i>
-                                        <i *ngIf=" (filterStatus$ | async)=== server.ipAddress"
-                                            class="fa fa-spinner fa-spin" style="font-size:24px;"></i>
-                                    </a>
-                                </td>
-                                <td>
-                                    <a class="delete" data-toggle="modal" style="cursor:pointer"
-                                        (click)="deleteServer(server.id)">
-                                        <i class="material-icons" title="Delete" data-toggle="modal">&#xE872;</i>
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </ng-container>
-                <ng-container *ngSwitchCase="DataState.ERROR">
-                    <div class="alert-danger">
-                        {{appState.error}}
-                    </div>
-                </ng-container>
-            </ng-container>
-        </div>
 
-    </div>
-</div>
-
-<div id="addEmployeeModal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form #serverForm="ngForm" (ngSubmit)="saveServer(serverForm)" id="addingserverForm">
-                <div class="modal-header">
-                    <h4 class="modal-title">Add a new Server</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true false">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>IP</label>
-                        <input type="text" ngModel class="form-control" name="ipAddress" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Name</label>
-                        <input type="text" ngModel class="form-control" name="name" required>
-                    </div>
-                    <div class="row">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                            <div class="form-group">
-                                <label>Memory</label>
-                                <input type="text" ngModel class="form-control" name="memory" required>
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                            <div class="form-group">
-                                <label>Type</label>
-                                <input type="text" ngModel class="form-control" name="type" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Status</label>
-                        <select class="form-control" name="status" ngModel="SERVER_DOWN">
-                            <option value="SERVER_UP">SERVER UP</option>
-                            <option value="SERVER_DOWN">SERVER DOWN</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" id="closeModal" data-dismiss="modal">
-                        cancel
-                    </button>
-                    <button type="submit" [disabled]="serverForm.invalid || (addSubject$ |async)"
-                        class="btn btn-success">
-                        <i *ngIf="(addSubject$ |async)" class="fa fa-spinner fa-spin"></i>
-                        <span *ngIf="(addSubject$ |async)">Saving ..</span>
-                        <span *ngIf="!(addSubject$ |async)">Add</span>
-                    </button>
-                </div>
-            </form>
         </div>
     </div>
 
+    <div id="addEmployeeModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form #serverForm="ngForm" (ngSubmit)="saveServer(serverForm)" id="addingserverForm">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add a new Server</h4>
+                        <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true false">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>IP</label>
+                            <input type="text" ngModel class="form-control" name="ipAddress" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" ngModel class="form-control" name="name" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+                                <div class="form-group">
+                                    <label>Memory</label>
+                                    <input type="text" ngModel class="form-control" name="memory" required>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+                                <div class="form-group">
+                                    <label>Type</label>
+                                    <input type="text" ngModel class="form-control" name="type" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select class="form-control" name="status" ngModel="SERVER_DOWN">
+                                <option value="SERVER_UP">SERVER UP</option>
+                                <option value="SERVER_DOWN">SERVER DOWN</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" id="closeModal" data-dismiss="modal">
+                            cancel
+                        </button>
+                        <button type="submit" [disabled]="serverForm.invalid || (addSubject$ |async)"
+                            class="btn btn-success">
+                            <i *ngIf="(addSubject$ |async)" class="fa fa-spinner fa-spin"></i>
+                            <span *ngIf="(addSubject$ |async)">Saving ..</span>
+                            <span *ngIf="!(addSubject$ |async)">Add</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
 </div>

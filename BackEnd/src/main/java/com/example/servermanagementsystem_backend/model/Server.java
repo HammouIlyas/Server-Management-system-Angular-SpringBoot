@@ -26,7 +26,6 @@ public class Server {
     private String name;
     private String memory;
     private String type;
-
     private String imageUrl;
     private ServerStatus status;
 

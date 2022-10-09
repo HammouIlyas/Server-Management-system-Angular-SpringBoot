@@ -5,11 +5,32 @@
   margin: 0;
   padding: 0;
 }
+.wrapper {
+  background-color: rgb(247, 244, 244);
+  height: 44em;
+  padding-top: 100px;
+}
+.page-title {
+  font-size: 50px;
+  font-family: "Maven Pro";
+  margin-bottom: 10px;
+  color: #255373;
+  text-align: center;
+}
 
 .container-xl {
   width: 80%;
   margin-left: 10%;
-  margin-top: 100px;
+  text-align: left;
+  border: 2px solid rgb(104, 104, 104);
+  border-radius: 15px;
+  padding-bottom: 10px;
+  z-index: 10;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  padding-top: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  background-color: white;
 }
 
 #servers {
@@ -21,9 +42,13 @@
   width: 98%;
   margin-left: 1%;
 }
+table {
+  border: 1px solid rgb(104, 104, 104, 0.5);
+}
 
 #row-header {
   background-color: #255373;
+  border-radius: 15px 15px 0 0;
   width: 100%;
   padding: 6px;
   position: relative;
@@ -75,4 +100,19 @@ form {
 .modal-dialog button {
   width: 50px;
   margin-top: 20px;
+}
+@media screen and (max-width: 1000px) {
+  .container-xl {
+    width: 94%;
+    margin-left: 3%;
+    margin-top: 100px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .container-xl {
+    width: 98%;
+    margin-left: 1%;
+    margin-top: 100px;
+  }
 }

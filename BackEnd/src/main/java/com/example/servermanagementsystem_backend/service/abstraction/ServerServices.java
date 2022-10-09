@@ -3,7 +3,6 @@ package com.example.servermanagementsystem_backend.service.abstraction;
 import com.example.servermanagementsystem_backend.model.Server;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.Collection;
 
 public interface ServerServices {

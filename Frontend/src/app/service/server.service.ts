@@ -23,11 +23,9 @@ export class ServerService {
       .pipe(tap(console.log), catchError(this.handleError))
   );
   getAllServers() {
-    console.log('getting data');
     return this.http
       .get<CustomResponse>(`${this.apiUrl}/server/list`)
       .subscribe((data) => {
-        console.log('hahaha');
         console.log(data);
       });
   }

@@ -15,7 +15,6 @@ import { ServerService } from './service/server.service';
 import { HttpClient } from '@angular/common/http';
 import { Server } from './interface/server';
 import { Status } from './enum/status.enum';
-import { NgForOf } from '@angular/common';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -55,7 +54,7 @@ export class AppComponent implements OnInit {
   //do it the old way
   getserver(): any {
     return this.http
-      .get<Server[]>('http://localhost:8081/server/list')
+      .get<Server[]>('http://localhost:8080/server/list')
       .subscribe((data) => {
         console.log(data);
       });
@@ -89,7 +88,6 @@ export class AppComponent implements OnInit {
   }
 
   filtringServers(status: Status): void {
-    console.log('teeeeeeeeeeeeet');
     this.appState$ = this.serverService
       .filter$(status, this.dataSubject.value)
       .pipe(
